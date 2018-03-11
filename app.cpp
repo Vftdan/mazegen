@@ -20,12 +20,18 @@ int main() {
 	}
 }
 
+void configure() {
+	
+}
+
 int* abstrScr(map<string, Algo> * algos, int w, int h) {
 	int * m = allocMatrix(w, h);
 	auto fillptr = CUI::chooseValue(*algos, "Nothing");
-	if((void*)fillptr == NULL) return NULL;
+	if((void*)fillptr == NULL) return m;
+	auto fill = *fillptr; 
 	algo::AlgPrefs p;
 	p.set("value", 2);
+	fill.clampPrefs(p);
 	fill.printPrefs(p);
 	fill.func(m, w, h, p);
 	return m;
@@ -43,7 +49,7 @@ void mazeScr() {
 	fill.func(m, 16, 16, p);
 	CUI::writeMatrixChars(m, 16, 16, "123", "--> ");*/
 	int * m = abstrScr(&mazealg::algos, 16, 16);
-	CUI::writeMatrixChars(m, 16, 16, "123", "--> ");
+	CUI::writeMatrixChars(m, 16, 16, " *", "--> ");
 }
 
 void heightsScr() {

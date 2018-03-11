@@ -2,6 +2,7 @@
 #include <set>
 #include <string>
 #include <iostream>
+#include "../utils.cpp"
 
 #ifndef algtypesincluded
 #define algtypesincluded
@@ -28,6 +29,15 @@ namespace algo {
 			}
 			data.insert(pair<string, int>(k, v));
 		}
+		void clampTo(string k, int lo, int hi) {
+			auto it = data.find(k);
+			int v = 0;
+			if(it != data.end()) {
+				v = (*it).second;
+				data.erase(it);
+			}
+			data.insert(pair<string, int>(k, clamp(v, lo, hi)));
+		}
 	};
 	typedef void (*AlgFunc)(int*, int, int, AlgPrefs&);
 	struct Algo {
@@ -43,6 +53,11 @@ namespace algo {
 			for(auto it = info.begin(); it != info.end(); it++) {
 				string name = (*it).name;
 				cout << name << "\t=\t" << p.get(name) << endl;
+			}
+		}
+		void clampPrefs(AlgPrefs & p) {
+			for(auto it = info.begin(); it != info.end(); it++) {
+				p.clampTo((*it).name, (*it).minVal, (*it).maxVal);
 			}
 		}
 	};
