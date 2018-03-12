@@ -43,6 +43,7 @@ namespace algo {
 	struct Algo {
 		AlgFunc func;
 		set<AlgPrefInfo> info;
+		Algo() {}
 		Algo(AlgFunc f, AlgPrefInfo * infarr, int inflen) {
 			func = f;
 			for(int i = 0; i < inflen; i++) {

@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include "CUI.cpp"
@@ -26,14 +27,25 @@ void configure() {
 
 int* abstrScr(map<string, Algo> * algos, int w, int h) {
 	int * m = allocMatrix(w, h);
-	auto fillptr = CUI::chooseValue(*algos, "Nothing");
+	/*auto fillptr = CUI::chooseValue(*algos, "Nothing");
 	if((void*)fillptr == NULL) return m;
 	auto fill = *fillptr; 
 	algo::AlgPrefs p;
 	p.set("value", 2);
 	fill.clampPrefs(p);
 	fill.printPrefs(p);
-	fill.func(m, w, h, p);
+	fill.func(m, w, h, p);*/
+	Algo *algptr, alg;
+	algo::AlgPrefs p;
+	while(true) {
+		algptr = CUI::chooseValue(*algos, "Finish");
+		if((void*)algptr == NULL) break;
+		alg = *algptr;
+		alg.clampPrefs(p);
+		alg.printPrefs(p);
+		//TODO edit prefs
+		alg.func(m, w, h, p);
+	}
 	return m;
 }
 
@@ -49,7 +61,9 @@ void mazeScr() {
 	fill.func(m, 16, 16, p);
 	CUI::writeMatrixChars(m, 16, 16, "123", "--> ");*/
 	int * m = abstrScr(&mazealg::algos, 16, 16);
+	clampMatrix(m, 16, 16, 0, 1);
 	CUI::writeMatrixChars(m, 16, 16, " *", "--> ");
+	free(m);
 }
 
 void heightsScr() {

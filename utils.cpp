@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 #ifndef utilsincluded
 #define utilsincluded
@@ -9,6 +10,7 @@ int * allocMatrix(int w, int h) {
 	//cout << w << h << m[w * h - 1];
 	return m;
 }
+
 template <typename T>
 bool rangeAssert(T val, T lo, T hi, char * name) {
 	if(val < lo) {
@@ -27,6 +29,10 @@ T clamp(T val, T lo, T hi) {
 	if(val > hi) return hi;
 	if(val < lo) return lo;
 	return val;
+}
+
+void clampMatrix(int * m, int w, int h, int lo, int hi) {
+	for(int i = 0; i < w * h; i++) m[i] = clamp(m[i], lo, hi);
 }
 
 struct Random {
@@ -48,6 +54,20 @@ struct Random {
 		return r1 ^ r2;
 	}
 };
+
+struct Position {
+	int x, y;
+	Position(int x, int y) : x(x), y(y) {};
+	Position() : x(0), y(0) {};
+};
+bool operator==(const Position & a, const Position & b) {
+	return a.x == b.x && a.y == b.y;
+}
+bool operator<(const Position & a, const Position & b) {
+	if(a.x == b.x) return a.y < b.y;
+	return a.x < b.x;
+}
+
 
 void nopFunc() {}
 
