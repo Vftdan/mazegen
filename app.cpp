@@ -86,9 +86,10 @@ void mazeScr() {
 	fill.printPrefs(p);
 	fill.func(m, 16, 16, p);
 	CUI::writeMatrixChars(m, 16, 16, "123", "--> ");*/
-	int * m = abstrScr(&mazealg::algos, 16, 16);
-	clampMatrix(m, 16, 16, 0, 1);
-	CUI::writeMatrixChars(m, 16, 16, " #", "--> ");
+	Position size = CUI::readPos("width", "height", true);
+	int * m = abstrScr(&mazealg::algos, size.x, size.y);
+	clampMatrix(m, size.x, size.y, 0, 1);
+	CUI::writeMatrixChars(m, size.x, size.y, " #", "--> ");
 	free(m);
 }
 

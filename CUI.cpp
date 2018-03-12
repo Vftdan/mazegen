@@ -66,4 +66,28 @@ namespace CUI {
 			cout << endl;
 		}
 	}
+	Position readPos(string xname, string yname, bool force) {
+		int x = 0, y = 0;
+		do {
+			cout << "Enter " << xname << ": ";
+			cin >> x;
+			if(!rangeAssert(x, 1, 256, xname)) {
+				cin.clear();
+				x = 0;
+				continue;
+			}
+			break;
+		} while(force);
+		do {
+			cout << "Enter " << yname << ": ";
+			cin >> y;
+			if(!rangeAssert(y, 1, 256, yname)) {
+				cin.clear();
+				y = 0;
+				continue;
+			}
+			break;
+		} while(force);
+		return Position(x, y);
+	}
 }
