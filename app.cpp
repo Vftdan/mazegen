@@ -4,17 +4,18 @@
 #include "CUI.cpp"
 #include "utils.cpp"
 #include "alg/mazealg.cpp"
+#include "alg/hmapalg.cpp"
 
 using namespace std;
 void mazeScr();
-void heightsScr();
+void hmapScr();
 
 int main() {
 	CUI::Choice ch[2];
 	ch[0].name = "Maze";
 	ch[0].func = &mazeScr;
 	ch[1].name = "Heights map";
-	ch[1].func = &heightsScr;
+	ch[1].func = &hmapScr;
 	while(true) {
 		cout << "Choose" << endl;
 		if(!CUI::choose(ch, 2, "Exit")) return 0;
@@ -93,6 +94,11 @@ void mazeScr() {
 	free(m);
 }
 
-void heightsScr() {
+void hmapScr() {
+	Position size = CUI::readPos("width", "height", true);
+	int * m = abstrScr(&hmapalg::algos, size.x, size.y);
+	clampMatrix(m, size.x, size.y, 0, 15);
+	CUI::writeMatrixChars(m, size.x, size.y, "0123456789ABCDEF", "--> ");
+	free(m);
 	
 }
