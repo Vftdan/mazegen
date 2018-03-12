@@ -10,8 +10,9 @@ using namespace algo;
 namespace mazealg {
 	namespace funcs {
 		void fill(int * m, int w, int h, AlgPrefs & p) {
+			int v = p.get("value");
 			for(int i = 0; i < w * h; i++) {
-				m[i] = p.get("value");
+				m[i] = v;
 			}
 		}
 		void fillRandom(int * m, int w, int h, AlgPrefs & p) {
