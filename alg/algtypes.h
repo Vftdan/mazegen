@@ -11,10 +11,14 @@ namespace algo {
 		string name;
 		int minVal, maxVal;
 		AlgPrefInfo(string name, int minVal, int maxVal) : name(name), minVal(minVal), maxVal(maxVal) {}
-		};
-		bool operator<(const AlgPrefInfo& a, const AlgPrefInfo& b) {
-			return a.name < b.name;
-		} 
+		AlgPrefInfo(string name) : name(name) {}
+	};
+	bool operator<(const AlgPrefInfo& a, const AlgPrefInfo& b) {
+		return a.name < b.name;
+	} 
+	bool operator==(const AlgPrefInfo& a, const AlgPrefInfo& b) {
+		return a.name == b.name;
+	} 
 	struct AlgPrefs {
 		map<string, int> data;
 		int get(string k) {
@@ -52,7 +56,8 @@ namespace algo {
 		}
 		void printPrefs(AlgPrefs & p) {
 			for(auto it = info.begin(); it != info.end(); it++) {
-				string name = (*it).name;
+				if(it->minVal == it->maxVal) continue;
+				string name = it->name;
 				cout << name << "\t=\t" << p.get(name) << endl;
 			}
 		}
@@ -60,6 +65,12 @@ namespace algo {
 			for(auto it = info.begin(); it != info.end(); it++) {
 				p.clampTo((*it).name, (*it).minVal, (*it).maxVal);
 			}
+		}
+		bool hasPref(string name) {
+			return info.count(AlgPrefInfo(name));
+		}
+		const AlgPrefInfo* getPrefInfo(string name) {
+			return &(*info.find(AlgPrefInfo(name)));
 		}
 	};
 }

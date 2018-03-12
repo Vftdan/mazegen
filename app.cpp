@@ -21,9 +21,30 @@ int main() {
 	}
 }
 
+algo::Algo * c_algptr;
+algo::AlgPrefs * c_prefsptr;
+
 void configure() {
-	
+	string name;
+	int value;
+	cout << "Enter argument name: ";
+	cin.ignore();
+	getline(cin, name);
+	if(!(*c_algptr).hasPref(name)) {
+		cout << "No such argument" << endl;
+		return;
+	}
+	cout << "New value = ";
+	cin >> value;
+	const algo::AlgPrefInfo * pi = c_algptr->getPrefInfo(name);
+	if(!rangeAssert(value, pi->minVal, pi->maxVal, name)) {
+		cin.clear();
+		return;
+	}
+	c_prefsptr->set(name, value);
 }
+
+const CUI::Choice confChoice = CUI::Choice("Configure", &configure);
 
 int* abstrScr(map<string, Algo> * algos, int w, int h) {
 	int * m = allocMatrix(w, h);
@@ -42,9 +63,14 @@ int* abstrScr(map<string, Algo> * algos, int w, int h) {
 		if((void*)algptr == NULL) break;
 		alg = *algptr;
 		alg.clampPrefs(p);
-		alg.printPrefs(p);
-		//TODO edit prefs
+		c_algptr = &alg;
+		c_prefsptr = &p;
+		while(true) {
+			alg.printPrefs(p);
+			if(CUI::choose(&confChoice, 1, "Ok") == 0) break;
+		}
 		alg.func(m, w, h, p);
+		cout << "Algorithm applied" << endl;
 	}
 	return m;
 }
@@ -62,7 +88,7 @@ void mazeScr() {
 	CUI::writeMatrixChars(m, 16, 16, "123", "--> ");*/
 	int * m = abstrScr(&mazealg::algos, 16, 16);
 	clampMatrix(m, 16, 16, 0, 1);
-	CUI::writeMatrixChars(m, 16, 16, " *", "--> ");
+	CUI::writeMatrixChars(m, 16, 16, " #", "--> ");
 	free(m);
 }
 

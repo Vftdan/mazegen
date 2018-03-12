@@ -11,8 +11,10 @@ namespace CUI {
 	struct Choice {
 		char * name;
 		ChoiceFunc func;
+		Choice() {}
+		Choice(char * name, ChoiceFunc func) : name(name), func(func) {}
 	};
-	int choose(Choice * ch, int len, char * nth) {
+	int choose(const Choice * ch, int len, char * nth) {
 		//map<int, ChoiceFunc> m;
 		if(len < 1) return 0;
 		int i;
@@ -23,7 +25,10 @@ namespace CUI {
 			}
 			cout << 0 << "\t" << nth << endl;
 			cin >> i;
-			if(!rangeAssert(i, 0, len, "Choice")) continue;
+			if(!rangeAssert(i, 0, len, "Choice")) {
+				cin.clear();
+				continue;
+			}
 			if(i == 0) return 0;
 			ch[i - 1].func();
 			return i;
@@ -43,7 +48,10 @@ namespace CUI {
 			}
 			cout << 0 << "\t" << nth << endl;
 			cin >> i;
-			if(!rangeAssert(i, 0, len, "Choice")) continue;
+			if(!rangeAssert(i, 0, len, "Choice")) {
+				cin.clear();
+				continue;
+			}
 			if(i == 0) return (T*)NULL;
 			return &(*m.find(v[i - 1])).second;;
 		}

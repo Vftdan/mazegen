@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <string>
 #ifndef utilsincluded
 #define utilsincluded
 
@@ -12,7 +13,7 @@ int * allocMatrix(int w, int h) {
 }
 
 template <typename T>
-bool rangeAssert(T val, T lo, T hi, char * name) {
+bool rangeAssert(const T & val, const T & lo, const T & hi, string name) {
 	if(val < lo) {
 		cout << name << " is lower than " << lo << endl;
 		return false;
