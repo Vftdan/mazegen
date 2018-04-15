@@ -68,6 +68,36 @@ bool operator<(const Position & a, const Position & b) {
 	if(a.x == b.x) return a.y < b.y;
 	return a.x < b.x;
 }
+Position operator*(const Position & p, const double & k) {
+	Position r;
+	r.x = (int)(k * p.x);
+	r.y = (int)(k * p.y);
+	return r;
+}
+Position operator+(const Position & a, const Position & b) {
+	Position r;
+	r.x = a.x + b.x;
+	r.y = a.y + b.y;
+	return r;
+}
+Position operator-(const Position & a, const Position & b) {
+	Position r;
+	r.x = a.x - b.x;
+	r.y = a.y - b.y;
+	return r;
+}
+
+int mxGetVal(int * m, int w, int h, const Position & p) {
+	int x = ((p.x % w) + w) % w;	
+	int y = ((p.y % h) + h) % h;	
+	return m[y * w + x];
+}
+
+void mxSetVal(int * m, int w, int h, const Position & p, int val) {
+	int x = ((p.x % w) + w) % w;	
+	int y = ((p.y % h) + h) % h;	
+	m[y * w + x] = val;
+}
 
 
 void nopFunc() {}
