@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include "utils.cpp"
+#ifndef cuiincluded
+#define cuiincluded
 
 using namespace std;
 namespace CUI {
@@ -91,3 +93,4 @@ namespace CUI {
 		return Position(x, y);
 	}
 }
+#endif

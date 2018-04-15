@@ -3,6 +3,7 @@
 #include <string>
 #ifndef utilsincluded
 #define utilsincluded
+//#define JSOR(a, b) (a?a:b)
 
 using namespace std;
 int * allocMatrix(int w, int h) {
@@ -30,6 +31,16 @@ T clamp(T val, T lo, T hi) {
 	if(val > hi) return hi;
 	if(val < lo) return lo;
 	return val;
+}
+
+template <typename Tval, typename Tcoef>
+Tval lerp(Tval lo, Tval hi, Tcoef k) {
+	return lo + k * (hi - lo);
+}
+
+template <typename Tval, typename Tcoef>
+Tval bilerp(Tval ll, Tval lh, Tval hl, Tval hh, Tcoef kx, Tcoef ky) {
+	return lerp(lerp(ll, lh, kx), lerp(hl, hh, kx), ky);
 }
 
 void clampMatrix(int * m, int w, int h, int lo, int hi) {
@@ -97,6 +108,17 @@ void mxSetVal(int * m, int w, int h, const Position & p, int val) {
 	int x = ((p.x % w) + w) % w;	
 	int y = ((p.y % h) + h) % h;	
 	m[y * w + x] = val;
+}
+
+double mxGetLerp(int * m, int w, int h, double x, double y) {
+	int ix = (int) x, iy = (int) y;
+	if(x < 0) ix--;
+	if(y < 0) iy--;
+	double	 ll = mxGetVal(m, w, h, Position(ix, iy))
+		,lh = mxGetVal(m, w, h, Position(ix + 1, iy))
+		,hl = mxGetVal(m, w, h, Position(ix, iy + 1))
+		,hh = mxGetVal(m, w, h, Position(ix + 1, iy + 1));
+	return bilerp(ll, lh, hl, hh, x - ix, y - iy);
 }
 
 

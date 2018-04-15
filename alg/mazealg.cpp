@@ -25,7 +25,8 @@ namespace mazealg {
 		void dfsMaze(int * m, int w, int h, AlgPrefs & p) {
 			int x = p.get("start x"), y = p.get("start y"), val = p.get("value"), i, j;
 			if(x >= w || y >= h) {
-				cout << "Start position is not in the maze" << endl;	
+				cout << "Start position is not in the maze" << endl;
+				return;
 			}
 			Position t;
 			Random r = Random(p.get("seed"));
@@ -71,6 +72,35 @@ namespace mazealg {
 				nb.clear();
 			}
 		}
+		void binTreeMaze(int * m, int w, int h, AlgPrefs & p) {
+			int sx = p.get("start x"), sy = p.get("start y"), val = p.get("value"), x, y;
+			if(sx >= w || sy >= h) {
+				cout << "Start position is not in the maze" << endl;
+				return;
+			}
+			int	dx = p.get("invert x")?-2:2,
+				dy = p.get("invert y")?-2:2;
+			Random r = Random(p.get("seed"));
+			bool avx, avy;
+			for(x = sx; 0 <= x && x < w; x += dx) {
+				for(y = sy; 0 <= y && y < h; y += dy) {
+					mxSetVal(m, w, h, Position(x, y), val);
+					avx = 0 <= x + dx && x + dx < w;
+					avy = 0 <= y + dy && y + dy < h;
+					if(avx && avy) {
+						if(r.next() & 1) {
+							mxSetVal(m, w, h, Position(x + dx / 2, y), val);
+						} else {
+							mxSetVal(m, w, h, Position(x, y + dy / 2), val);
+						}
+					} else if(avx) {
+						mxSetVal(m, w, h, Position(x + dx / 2, y), val);
+					} else if(avy) {
+						mxSetVal(m, w, h, Position(x, y + dy / 2), val);
+					}
+				}
+			}
+		}
 		
 	}
 	namespace infos {
@@ -81,9 +111,16 @@ namespace mazealg {
 					,AlgPrefInfo("value", 0, 1)
 					,AlgPrefInfo("start x", 0, 255)
 					,AlgPrefInfo("start y", 0, 255)};
+		AlgPrefInfo binTreeMaze[] =	{AlgPrefInfo("seed", -2147483648, 2147483647)
+						,AlgPrefInfo("value", 0, 1)
+						,AlgPrefInfo("invert x", 0, 1)
+						,AlgPrefInfo("invert y", 0, 1)
+						,AlgPrefInfo("start x", 0, 255)
+						,AlgPrefInfo("start y", 0, 255)};
 	}
 	map<string, Algo> algos =	{{"fill", Algo(&funcs::fill, infos::fill, 1)}
 					,{"fill random", Algo(&funcs::fillRandom, infos::fillRandom, 2)}
-					,{"DFS", Algo(&funcs::dfsMaze, infos::dfsMaze, 4)}};
+					,{"DFS", Algo(&funcs::dfsMaze, infos::dfsMaze, 4)}
+					,{"binary tree", Algo(&funcs::binTreeMaze, infos::binTreeMaze, 6)}};
 	//const Algo fill = Algo(&funcs::fill, infos::fill, 1);
 }
